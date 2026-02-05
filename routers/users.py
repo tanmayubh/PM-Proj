@@ -12,12 +12,12 @@ router = APIRouter(
 )
 
 #Create a User
-@router.post("/", response_model= UserResponse)
+@router.post("/", response_model= UserResponse, response_model_exclude_none=True)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     
     return user_services.create_user(db, user)
 
 #List all users
-@router.get("/", response_model=list[UserResponse])
+@router.get("/", response_model=list[UserResponse], response_model_exclude_none=True)
 def list_users(db: Session = Depends(get_db)):
     return user_services.get_all_users(db)

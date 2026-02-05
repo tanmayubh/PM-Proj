@@ -16,7 +16,7 @@ class TaskCreate(BaseModel):
     title: str
     description: Optional[str] = None
     project_id: int
-    user_id: int = None
+    assigned_user_id: Optional[int] = None
     status: Literal["todo", "in_progress", "done"] = "todo"
     priority: int = 3
     due_date: Optional[date] = None

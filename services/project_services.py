@@ -33,9 +33,4 @@ def delete_project(db: Session, project_id: int):
 
     return {"message": "Project deleted successfully"}
 
-#def get_tasks_by_project(db: Session, project_id: int):
-#    project = db.query(Project).filter(Project.id == project_id).first()
- #   if not project:
-  #      raise HTTPException(status_code=404, detail="Project not found")
-#
- #   return db.query(Task).filter(Task.project_id == project_id).all()
+

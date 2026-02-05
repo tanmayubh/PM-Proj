@@ -9,13 +9,23 @@ def create_task(db: Session, task: TaskCreate, current_user: User) -> Task:
     project = db.query(Project).filter(Project.id == task.project_id).first()
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
+    
+    #ASSIGNMENT LOGIC
+    assigned_user_id = current_user.id
 
     # Validate user (if provided)
-    if task.user_id:
-        user = db.query(User).filter(User.id == task.user_id).first()
+    if task.assigned_user_id:
+        if current_user.role not in {"admin", "manager"}:
+            raise HTTPException(
+                status_code=403,
+                detail="Only admin or manager can assign tasks"
+            )
+        user = db.query(User).filter(User.id == task.assigned_user_id).first()
         if not user:
-            raise HTTPException(status_code=404, detail="User not found")
-
+            raise HTTPException(status_code=404, detail="Assigned user not found")
+        
+        assigned_user_id = task.assigned_user_id
+    
     db_task = Task(
         title=task.title,
         description=task.description,
@@ -23,7 +33,7 @@ def create_task(db: Session, task: TaskCreate, current_user: User) -> Task:
         project_id=task.project_id,
         priority=task.priority,
         due_date=task.due_date,
-        user_id=current_user.id
+        user_id=assigned_user_id
     )
 
     db.add(db_task)

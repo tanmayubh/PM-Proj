@@ -17,10 +17,9 @@ def get_current_user(
 ):
     try:
         payload = jwt.decode(
-            token,
-            os.getenv("JWT_SECRET_KEY"),
-            algorithms=[os.getenv("JWT_ALGORITHM")]
-        )
+            token, SECRET_KEY,
+            algorithms=[ALGORITHM])
+        
         user_id: str = payload.get("sub")
         if not user_id:
             raise HTTPException(status_code=401, detail="Invalid token")

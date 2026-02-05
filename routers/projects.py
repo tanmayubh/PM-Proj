@@ -14,13 +14,13 @@ router = APIRouter(
 )
 
 # Get all projects
-@router.get("/", response_model=list[ProjectResponse])
+@router.get("/", response_model=list[ProjectResponse], response_model_exlude_none=True)
 def list_projects(db: Session = Depends(get_db)):
     return project_services.get_all_projects(db)
 
 
 # Create a project
-@router.post("/", response_model=ProjectResponse)
+@router.post("/", response_model=ProjectResponse, response_model_exlude_none=True)
 def create_project(project: ProjectCreate, db: Session = Depends(get_db), current_user=Depends(require_roles("admin", "manager"))):
     return project_services.create_project(db, project)
 
@@ -31,6 +31,6 @@ def delete_project(project_id: int, db: Session = Depends(get_db), current_user=
     return project_services.delete_project(db, project_id)
 
 # Get tasks by project
-@router.get("/{project_id}/tasks", response_model=list[TaskResponse])
+@router.get("/{project_id}/tasks", response_model=list[TaskResponse], response_model_exlude_none=True)
 def get_tasks_by_project(project_id: int, db: Session = Depends(get_db)):
     return project_services.get_tasks_by_project(db, project_id)
