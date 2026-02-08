@@ -8,7 +8,9 @@ class Project(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
-    tasks = relationship("Task", backref="project")
+    tasks = relationship(
+        "Task", backref="project",
+        cascade="all, delete-orphan")
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -37,5 +39,5 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     role = Column(String, nullable=False)
 
-def __repr__(self):
+    def __repr__(self):
         return f"<User id ={self.id}username={self.username}>"
