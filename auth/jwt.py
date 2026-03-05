@@ -2,9 +2,14 @@ from datetime import datetime, timedelta
 from jose import jwt
 import os
 
-SECRET_KEY = os.getenv("JWT_SECRET_KEY")
-ALGORITHM = os.getenv("JWT_ALGORITHM")
-EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES"))
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "dev-insecure-secret")
+ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
+
+_expire_minutes_raw = os.getenv("JWT_EXPIRE_MINUTES", "60")
+try:
+    EXPIRE_MINUTES = int(_expire_minutes_raw)
+except (TypeError, ValueError):
+    EXPIRE_MINUTES = 60
 
 
 def create_access_token(data: dict):
