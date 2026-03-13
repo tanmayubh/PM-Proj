@@ -1,13 +1,17 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Literal, Optional
-from datetime import date
+from datetime import date, datetime
 
 class ProjectCreate(BaseModel):
     name: str
+    description: Optional[str] = None
 
 class ProjectResponse(BaseModel):
     id: int
     name: str
+    description: Optional[str]
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True
@@ -26,30 +30,33 @@ class TaskStatusUpdate(BaseModel):
 
 class TaskResponse(BaseModel):
     id: int
-    title:str
-    description: Optional[str]
-    user_id: int = None
+    title: str
+    description: Optional[str] = None
+    user_id: Optional[int] = None
     status: Literal["todo", "in_progress", "done"]
     project_id: int
     priority: int
-    due_date: date = None
+    due_date: Optional[date] = None
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True
 
 class UserCreate(BaseModel):
     username: str
-    email: str
+    email: EmailStr
     password: str
+    role: Literal["admin", "manager", "member"]
 
-    role: Literal["admin", "manager", "member"] 
-    
 class UserResponse(BaseModel):
-    id:int
-    username:str
-    email:str
-    
+    id: int
+    username: str
+    email: str
     role: str
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True
